@@ -2,7 +2,8 @@
 
 namespace App\Data\Models;
 
-use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 trait ResourcefulTrait
 {
@@ -81,32 +82,6 @@ trait ResourcefulTrait
     }
 
     /**
-     * Create a new model
-     *
-     * @param Request $request
-     * @return mixed
-     */
-    public function store(Request $request)
-    {
-        $record = $this->create($request->all());
-        return $record;
-    }
-
-    /**
-     * Update an existing model
-     *
-     * @param $id
-     * @param Request $request
-     * @return mixed
-     */
-    public function update($id, Request $request)
-    {
-        $record = $this->getByKey($id);
-        $record->update($request->all());
-        return $record;
-    }
-
-    /**
      * Get a model by key
      *
      * @param $key
@@ -137,55 +112,5 @@ trait ResourcefulTrait
             return $this->query->withTrashed()->findOrFail($key);
         return $this->query->findOrFail($key);
 
-    }
-
-    /**
-     * Delete an existing model
-     *
-     * @param $id
-     * @return mixed
-     */
-    public function delete($id)
-    {
-        $record = $this->getByKey($id);
-        return $record->forceDelete();
-    }
-
-    /**
-     * Archive an existing model
-     *
-     * @param $id
-     * @return mixed
-     */
-    public function archive($id)
-    {
-        $record = $this->getByKey($id);
-        $record->delete();
-        return $record;
-    }
-
-    /**
-     * Permanently delete an record.
-     *
-     * @param $id
-     * @return bool|null
-     */
-    public function forceDelete($id)
-    {
-        $record = $this->getByKey($id, true);
-        return $record->forceDelete();
-    }
-
-    /**
-     * Restore an archived model
-     *
-     * @param $id
-     * @return mixed
-     */
-    public function restore($id)
-    {
-        $record = $this->getByKey($id, true);
-        $record->restore();
-        return $record;
     }
 }
