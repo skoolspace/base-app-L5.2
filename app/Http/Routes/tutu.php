@@ -20,16 +20,6 @@ $api->version('v1', function ($api) {
         });
 
         // Resource routes
-        $api->get('projects', 'ProjectsController@index');
-        $api->post('projects', 'ProjectsController@store');
-        $api->get('projects/{project}', 'ProjectsController@show');
-        $api->put('projects/{project}', 'ProjectsController@update');
-        $api->delete('projects/{project}', 'ProjectsController@destroy');
-
-        $api->get('projects/{task}/tasks', 'TasksController@index');
-        $api->post('projects/{task}/tasks', 'TasksController@store');
-        $api->get('projects/{task}/tasks/{project}', 'TasksController@show');
-        $api->put('projects/{task}/tasks/{project}', 'TasksController@update');
-        $api->delete('projects/{task}/tasks/{project}', 'TasksController@destroy');
+        // ADD ROUTES HERE...
     });
 });
