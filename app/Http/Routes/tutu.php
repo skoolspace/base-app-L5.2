@@ -26,10 +26,10 @@ $api->version('v1', function ($api) {
         $api->put('projects/{project}', 'ProjectsController@update');
         $api->delete('projects/{project}', 'ProjectsController@destroy');
 
-        $api->get('tasks', 'TasksController@index');
-        $api->post('tasks', 'TasksController@store');
-        $api->get('tasks/{project}', 'TasksController@show');
-        $api->put('tasks/{project}', 'TasksController@update');
-        $api->delete('tasks/{project}', 'TasksController@destroy');
+        $api->get('projects/{task}/tasks', 'TasksController@index');
+        $api->post('projects/{task}/tasks', 'TasksController@store');
+        $api->get('projects/{task}/tasks/{project}', 'TasksController@show');
+        $api->put('projects/{task}/tasks/{project}', 'TasksController@update');
+        $api->delete('projects/{task}/tasks/{project}', 'TasksController@destroy');
     });
 });

@@ -23,5 +23,7 @@ class BaseModel extends Model
         if ($name == "query") {
             return $this;
         }
+
+        return parent::__get($name);
     }
 }

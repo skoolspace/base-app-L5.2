@@ -2,6 +2,8 @@
 
 namespace App\Data\Models\Traits;
 
+use App\Data\Models\Project;
+
 trait BelongsToProject
 {
     /**
@@ -9,10 +11,10 @@ trait BelongsToProject
      *
      * @return void
      */
-    public static function bootBelongsToUser()
+    public static function bootBelongsToProject()
     {
         static::creating(function ($model) {
-            $model->project_id = get_request_id();
+            $model->project_id = Project::findOrFail(get_request_id())->id;
         });
     }
 
@@ -25,7 +27,7 @@ trait BelongsToProject
     {
         $query = parent::newQuery();
         return $query->where(function ($q) {
-            return $q->where('project_id', get_request_id());
+            return $q->where('project_id', Project::findOrFail(get_request_id())->id);
         });
     }
 }

@@ -32,6 +32,11 @@ class RetrieveRequestIdMiddleware
     public function prepareUrl(Request $request)
     {
         $attributes = explode("/", $request->getRequestUri());
+
+        // Remove the blank space
+        array_shift($attributes);
+
+        // Remove the api
         array_shift($attributes);
 
         return $attributes;

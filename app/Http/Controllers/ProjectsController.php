@@ -63,7 +63,7 @@ class ProjectsController extends Controller
      */
     public function show($id)
     {
-        $item = $this->model->getByKey($id);
+        $item = $this->model->getByKey(get_request_id());
 
         return $this->response()->array($item->toArray());
     }
@@ -78,7 +78,7 @@ class ProjectsController extends Controller
     public function update(Request $request, $id)
     {
         // TODO: Validate the input
-        $item = $this->model->fill($request->all());
+        $item = $this->model->getByKey(get_request_id())->fill($request->all());
         $item->save();
 
         return $this->response()->array($item->toArray());
@@ -92,7 +92,7 @@ class ProjectsController extends Controller
      */
     public function destroy($id)
     {
-        $this->model->delete();
+        $this->model->getByKey(get_request_id())->delete();
 
         return $this->response->noContent();
     }

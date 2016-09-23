@@ -22,7 +22,7 @@ class Task extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['title', 'completed'];
+    protected $fillable = ['title', 'completed', 'project_id'];
 
     /**
      * Defines the model's hidden attributes

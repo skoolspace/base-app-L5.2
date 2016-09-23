@@ -40,8 +40,24 @@ class TasksController extends Controller
 
         return $this->response()->array($collection->toArray());
     }
-    
-    
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        // TODO: Validate the input
+        $item = $this->model->create($request->all());
+
+        return $this->response()
+            ->array($item->toArray())
+            ->setStatusCode(Response::HTTP_CREATED);
+    }
+
+
     /**
      * Display the specified resource.
      *
@@ -50,7 +66,7 @@ class TasksController extends Controller
      */
     public function show($id)
     {
-        $item = $this->model->getByKey($id);
+        $item = $this->model->getByKey(get_request_id());
 
         return $this->response()->array($item->toArray());
     }
@@ -65,7 +81,8 @@ class TasksController extends Controller
     public function update(Request $request, $id)
     {
         // TODO: Validate the input
-        $item = $this->model->update($request->all());
+        $item = $this->model->getByKey(get_request_id())->fill($request->all());
+        $item->save();
 
         return $this->response()->array($item->toArray());
     }
@@ -78,7 +95,7 @@ class TasksController extends Controller
      */
     public function destroy($id)
     {
-        $this->model->delete();
+        $this->model->getByKey(get_request_id())->delete();
 
         return $this->response->noContent();
     }
