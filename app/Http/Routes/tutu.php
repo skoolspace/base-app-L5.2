@@ -13,10 +13,23 @@ $api = app(Dingo\Api\Routing\Router::class);
 
 $api->version('v1', function ($api) {
     $api->group(['namespace' => 'App\Http\Controllers'], function ($api) {
-        //Authentication routes
+        // Authentication routes
         $api->group(['namespace' => 'Auth'], function ($api) {
-            $api->post('/auth/login', 'AuthController@login');
-            $api->post('/auth/register', 'AuthController@register');
+            $api->post('/login', 'AuthController@login');
+            $api->post('/register', 'AuthController@register');
         });
+
+        // Resource routes
+        $api->get('projects', 'ProjectsController@index');
+        $api->post('projects', 'ProjectsController@store');
+        $api->get('projects/{project}', 'ProjectsController@show');
+        $api->put('projects/{project}', 'ProjectsController@update');
+        $api->delete('projects/{project}', 'ProjectsController@destroy');
+
+        $api->get('tasks', 'TasksController@index');
+        $api->post('tasks', 'TasksController@store');
+        $api->get('tasks/{project}', 'TasksController@show');
+        $api->put('tasks/{project}', 'TasksController@update');
+        $api->delete('tasks/{project}', 'TasksController@destroy');
     });
 });

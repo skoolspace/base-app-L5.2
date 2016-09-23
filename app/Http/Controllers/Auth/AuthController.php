@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Validator;
 use App\Data\Models\User;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Auth\Traits\JWTAuthenticationTrait;
 
@@ -24,17 +24,17 @@ class AuthController extends Controller
     /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
+     * @param Request $request
+     * @return void
      */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
+    protected function validateNewUser(Request $request){
+        $this->validate($request, [
             'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|min:6|confirmed',
+            'password' => 'required|min:6',
         ]);
     }
+
     /**
      * Create a new user instance after a valid registration.
      *

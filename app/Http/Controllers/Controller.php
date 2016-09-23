@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Dingo\Api\Routing\Helpers;
+use Dingo\Api\Exception\ResourceException;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -21,47 +23,13 @@ class Controller extends BaseController
     protected $statusCode = \Dingo\Api\Http\Response::HTTP_OK;
 
     /**
-     * Validate the controller input
+     * Throws a validation Exception
      *
-     * @param $action
-     */
-    public function validateInput($action)
-    {
-        if ($action == 'create')
-            $rules = $this->create_rules;
-        else
-            $rules = $this->update_rules;
-        $this->validateRequest($rules);
-    }
-
-    /**
-     * Handles the actual request validation
-     *
-     * @param array $rules
-     * @param array $messages
-     * @param array $customAttributes
-     * @return mixed
-     */
-    public function validateRequest(array $rules, array $messages = [], array $customAttributes = [])
-    {
-        $request = app('request');
-        $validator = app('validator')->make($request->all(), $rules, $messages, $customAttributes);
-        if ($validator->fails()) {
-            return $this->returnValidationErrors($validator);
-        }
-    }
-
-    /**
-     * Returns the validation errors
-     *
+     * @param Request $request
      * @param $validator
-     * @return mixed
      */
-    public function returnValidationErrors($validator)
+    protected function throwValidationException(Request $request, $validator)
     {
-        return $this->response()->array([
-            'message'   => 'Validation error',
-            'errors'        => $validator->errors()
-        ])->setStatusCode(422);
+        throw new ResourceException("Validation failed", $validator->getMessageBag());
     }
 }

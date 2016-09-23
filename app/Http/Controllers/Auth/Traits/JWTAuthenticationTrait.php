@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Auth\Traits;
 
+use App\Data\Models\User;
+use Tymon\JWTAuth\JWTAuth;
 use Illuminate\Http\Request;
-use Tymon\JWTAuth\Exceptions\JWTException;
+use App\Exceptions\InvalidCredentialsException;
 
 trait JWTAuthenticationTrait
 {
@@ -15,54 +17,52 @@ trait JWTAuthenticationTrait
      */
     public function login(Request $request)
     {
-        // Authenticate user by the user's credentials
-        $token = $this->authenticate($request->only('email', 'password'));
+        // Retrieve user based on the credentials provided
+        $user = $this->authenticateUser($request);
 
-        // Authentication passed and return the token
-        return $this->response()->array(compact('token'))->setStatusCode(200);
+        // Generate a token for the user and return it
+        $token = app(JWTAuth::class)->fromUser($user);
+
+        return ['token' => $token];
     }
+
     /**
      * Register a new user
      *
      * @param Request $request
      * @return mixed
      */
-    public function register(Request $request) {
-        //Validate the user credentials
-        $validator = $this->validator($request->all());
+    public function register(Request $request)
+    {
+        // Validate the user's credentials
+        $this->validateNewUser($request);
 
-        //Check if validation passed
-        if ($validator->fails()) {
-            $this->returnValidationErrors($validator);
-        }
-
-        //Create new user
+        // Create the new user
         $user = $this->create($request->all());
 
-        //Authenticate new user
-        $token = $this->authenticate($request->only('email', 'password'));
-        $message = 'User successfully created';
-
-        return $this->response()->array(compact('user', 'token', 'message'))->setStatusCode(201);
+        return $user;
     }
+
     /**
      * Authenticate the user by their credentials
      *
-     * @param array $data
-     * @return \Illuminate\Http\JsonResponse
+     * @param Request $request
+     * @return User
      */
-    public function authenticate(Array $data)
+    private function authenticateUser(Request $request)
     {
-        try {
-            // Attempt to verify the credentials and create a token for the user
-            if (! $token = \JWTAuth::attempt($data)) {
-                return $this->response()->array(['error' => 'invalid_credentials'])->setStatusCode(401);
-            }
-        } catch (JWTException $e) {
-            // Something went wrong whilst attempting to encode the token
-            return $this->response()->array(['error' => 'could_not_create_token'])->setStatusCode(500);
+        //Validate request data
+        $this->validate($request, [
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        //Check if a user with this credentials exist, throw error if not
+        if (!\Auth::guard()->attempt($request->only('email', 'password'))) {
+            throw new InvalidCredentialsException('Invalid email/password combination');
         }
-        // Authentication passed and return the token
-        return $token;
+
+        //Retrieve the user details and return
+        return User::where('email', $request->email)->first();
     }
 }

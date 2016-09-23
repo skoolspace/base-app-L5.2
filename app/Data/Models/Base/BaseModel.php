@@ -20,15 +20,8 @@ class BaseModel extends Model
      */
     public function __get($name)
     {
-        if ($name == 'query') {
-            if (!isset($this->query) || $this->query === null) {
-                if (method_exists($this, 'query')) {
-                    return $this->query();
-                }
-                return $this;
-            }
+        if ($name == "query") {
             return $this;
         }
-        return $this;
     }
 }
