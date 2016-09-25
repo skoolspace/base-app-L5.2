@@ -41,9 +41,8 @@
             "php artisan vendor:publish --provider='Dingo\\Api\\Provider\\LaravelServiceProvider'",
             "php artisan vendor:publish --provider='Tymon\\JWTAuth\\Providers\\JWTAuthServiceProvider'",
             "php artisan jwt:generate",
-            "npm install",
-            "npm install gulp",
-            "gulp"
+            "php -r \"copy('.env.example', '.env');\"",
+            "php artisan key:generate"
         ],
 
         "post-root-package-install": [
