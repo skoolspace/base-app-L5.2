@@ -38,7 +38,7 @@ class RouteServiceProvider extends ServiceProvider
     public function map(Router $router)
     {
         $this->mapWebRoutes($router);
-        $this->mapTutuRoutes($router);
+        $this->mapAkitectRoutes($router);
     }
 
     /**
@@ -64,12 +64,12 @@ class RouteServiceProvider extends ServiceProvider
      * @param  \Illuminate\Routing\Router  $router
      * @return void
      */
-    protected function mapTutuRoutes(Router $router)
+    protected function mapAkitectRoutes(Router $router)
     {
         $router->group([
             'namespace' => $this->namespace, 'middleware' => 'api',
         ], function ($router) {
-            require app_path('Http/Routes/tutu.php');
+            require app_path('Http/Routes/akitect.php');
         });
     }
 }
