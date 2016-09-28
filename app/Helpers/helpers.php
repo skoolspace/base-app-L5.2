@@ -1,15 +1,14 @@
 <?php
 
+use Illuminate\Support\Arr;
+
 /**
- * Get the first request id
+ * Returns the route parameter by the slug
+ *
+ * @param $slug
+ * @return string
  */
-function get_request_id()
+function get_request_id($slug)
 {
-    $ids = \Session::get('request_ids');
-
-    $id = array_pop($ids);
-
-    \Session::set('request_ids', $ids);
-
-    return $id;
+    return Arr::get(Route::current()->parameters(), $slug);
 }

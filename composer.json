@@ -36,13 +36,13 @@
         ]
     },
     "scripts": {
-        "tutu-install": [
+        "akitect-build": [
             "composer update",
             "php artisan vendor:publish --provider='Dingo\\Api\\Provider\\LaravelServiceProvider'",
             "php artisan vendor:publish --provider='Tymon\\JWTAuth\\Providers\\JWTAuthServiceProvider'",
-            "php artisan jwt:generate",
             "php -r \"copy('.env.example', '.env');\"",
-            "php artisan key:generate"
+            "php artisan key:generate",
+            "php artisan jwt:generate"
         ],
 
         "post-root-package-install": [
